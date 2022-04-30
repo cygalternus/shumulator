@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import {animate,stagger} from 'motion';
+import { useTimer } from 'react-timer-hook';
+
 let prevShuState =  "shu_d.png";
 let currentShuState = "shu_d.png";
 let previousIndex;
@@ -18,6 +20,7 @@ function App() {
 	const [started, setStarted] = useState(false); 
 	const [score, setScore] = useState(0); 
 	const [quoteData,setQuoteData] = useState([]);
+	const [seenHint,setSeenHint] = useState(localStorage.getItem("seenHint"));
 
 	const [yaminionImg,setYaminionImg] = useState("yaminion.png");
 	const isTyped = (char, index) => {
@@ -37,9 +40,13 @@ function App() {
 			return false;
 		}
 	}
+
 	const onFormSubmit = (e)=>{
 		e.preventDefault();
-
+		if (!seenHint){
+			localStorage.setItem("seenHint",true);
+			setSeenHint(true);
+		}
 		if (checkInput(e.target[0].value)){
 			setScore(score+1);
 			setEnteredText("");
@@ -170,10 +177,17 @@ function App() {
 			<div className='container'>
 			{
 				!started?
-				<div><button onClick={()=>{setStarted(true)}}>Start</button></div>:
+				<div>
+					<h1>YaminoTyping</h1>
+					<img src="/images/shu/shu_d.png"></img>
+					<h3>Type the quote you see as fast as you can! <br></br>See how high you can score in 30 seconds.</h3>
+					<button onClick={()=>{setStarted(true)}}>Start</button>
+				</div>:
 				<>
 					<audio id="explosionSfx" src="/sfx/explosion.mp3"></audio>
 					<div id="scoreContainer">Score: {score}</div>
+					<div id="timerContainer">Score: {score}</div>
+
 						<div id="enemyContainer">
 								<img className={showExplosion?"show":"hide"} id="explosion" src="/images/explosion.gif"></img>
 								<img id="yaminion" src={`/images/yaminion/${yaminionImg}`}></img>
@@ -190,7 +204,7 @@ function App() {
 									</h2>
 									<input  onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
 									<input style={{display:"none"}} disabled={isSent || enteredText.length == 0} type="submit"/>
-									<span className='hint'>Press enter to submit</span>
+									<span className={`hint ${!seenHint?"show":"hide"}`}>Press enter to submit</span>
 								</form>
 							</div>
 			
