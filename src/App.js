@@ -84,9 +84,10 @@ function App() {
 			setSentText(e.target[0].value);
 			setIsSent(true);
 			animate("#sentText",
-			{ y: -1000, rotate: 900 },
-			{ duration: 1, easing:"linear" });
+			{ y: -700, rotate: 900 },
+			{ duration: 0.4, easing:"linear" });
 			setTimeout(()=>{
+				document.getElementById("explosionSfx").currentTime = 0;
 				document.getElementById("explosionSfx").play();
 	
 			},150);
@@ -103,18 +104,18 @@ function App() {
 					setYaminionImg("yaminion_ko.png");
 				}
 				animate("#yaminion",
-					{ x:1000, y: -500, rotate: 900 },
+					{ x:500, y: -500, rotate: 900 },
 					{ duration: 1, easing:"linear"  });
-					},250);
+					},150);
 	
 			setTimeout(()=>{setShowExplosion(false);document.getElementById("explosion").src="";},900)
 			setTimeout(()=>{document.getElementById("sentText").removeAttribute('style');setYaminionImg("yaminion.png");
 				setIsSent(false);
 				animate("#yaminion",
 					{ x:[500,0], y: [0,0], rotate: [0,0] },
-					{ duration: 0.5, easing:'ease-out'  });
+					{ duration: 0.3, easing:'ease-out'  });
 					
-			},1500)
+			},600)
 		}
 		
 	}
