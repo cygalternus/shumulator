@@ -154,6 +154,7 @@ function App() {
 					}
 					else{
 						localStorage.setItem("personalBest",gblScore);
+						setPersonalBest(gblScore);
 					}
 				}
 			},1000);
