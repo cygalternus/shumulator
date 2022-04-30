@@ -30,7 +30,7 @@ function App() {
 		return false;
 	}
 	const checkInput = (input) =>{
-		if (input.trimEnd() == quote){
+		if (input.trimEnd() == quote.text){
 			return true;
 		}
 		else{
@@ -57,7 +57,14 @@ function App() {
 				setShowExplosion(true);
 				document.getElementById("explosion").src="/images/explosion.gif"
 				document.getElementById("explosionSfx").play();
-				setYaminionImg("yaminion_ko.png");
+				console.log(quote)
+				if (quote.tskr){
+					setYaminionImg("yaminion_tskr.png");
+
+				}
+				else{
+					setYaminionImg("yaminion_ko.png");
+				}
 				animate("#yaminion",
 					{ x:1000, y: -500, rotate: 900 },
 					{ duration: 1, easing:"linear"  });
@@ -66,7 +73,6 @@ function App() {
 			setTimeout(()=>{setShowExplosion(false);document.getElementById("explosion").src="";},900)
 			setTimeout(()=>{document.getElementById("sentText").removeAttribute('style');setYaminionImg("yaminion.png");
 				setIsSent(false);
-				// document.getElementById("yaminion").style.transform.rotate = 0;
 				animate("#yaminion",
 					{ x:[500,0], y: [0,0], rotate: [0,0] },
 					{ duration: 0.5, easing:'ease-out'  });
@@ -130,7 +136,7 @@ function App() {
 		}
 		previousIndex = randomNum;
 		usedQuotes.push(randomNum);
-		setQuote(quoteData[randomNum].text);
+		setQuote(quoteData[randomNum]);
 
 	}
 
@@ -149,7 +155,7 @@ function App() {
 		  .then(function(json) {
 			setQuoteData(json);
 			let randomNum =  Math.round(Math.random() * (json.length-1 - 0) + 0);
-			setQuote(json[randomNum].text)
+			setQuote(json[randomNum])
 			previousIndex = randomNum;
 			usedQuotes.push(randomNum);
 		  });
@@ -180,9 +186,9 @@ function App() {
 							<div className='formContainer'>
 								<form onSubmit={onFormSubmit}>
 									<h2 id="textinput">
-										{[...quote].map((e,index)=>{return <span className={isTyped(e,index)?"typed":""}>{e}</span>})}
+										{[...quote.text].map((e,index)=>{return <span className={isTyped(e,index)?"typed":""}>{e}</span>})}
 									</h2>
-									<input  onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
+									<input  onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
 									<input style={{display:"none"}} disabled={isSent || enteredText.length == 0} type="submit"/>
 			
 								</form>
