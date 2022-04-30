@@ -1,3 +1,4 @@
+
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
@@ -5,7 +6,9 @@ import {animate,stagger} from 'motion';
 let prevShuState =  "shu_d.png";
 let currentShuState = "shu_d.png";
 let previousIndex;
+let usedQuotes = [];
 function App() {
+
 	const [sentText,setSentText] = useState("");
 	const [isSent,setIsSent] = useState(false);
 	const [showExplosion,setShowExplosion] = useState(false);
@@ -15,6 +18,7 @@ function App() {
 	const [started, setStarted] = useState(false); 
 	const [score, setScore] = useState(0); 
 	const [quoteData,setQuoteData] = useState([]);
+
 	const [yaminionImg,setYaminionImg] = useState("yaminion.png");
 	const isTyped = (char, index) => {
 		if (enteredText.length-1 >= index){
@@ -22,13 +26,10 @@ function App() {
 				return true;
 			}
 		}
-		// if ((enteredText[enteredText.length-1] === char) || ){
-		// 	return true;
-		// }
+
 		return false;
 	}
 	const checkInput = (input) =>{
-		console.log(input)
 		if (input.trimEnd() == quote){
 			return true;
 		}
@@ -37,7 +38,6 @@ function App() {
 		}
 	}
 	const onFormSubmit = (e)=>{
-		console.log("send")
 		e.preventDefault();
 
 		if (checkInput(e.target[0].value)){
@@ -82,22 +82,17 @@ function App() {
 		yaminion.src = `/images/yaminion/${yaminionImg}`;
 		enemyContainer.append(yaminion);
 
-	//	<img class="yaminion" src={`/images/yaminion/${yaminionImg}`}></img>
 
 		enemyContainer.append(yaminion);
 	}
-	const removeElementsByClass = (className) => {
-		const elements = document.getElementsByClassName(className);
-		while(elements.length > 0){
-			elements[0].parentNode.removeChild(elements[0]);
-		}
-	}
+
 	const keyAnimate = (e) => {
 		var explosionAudio = document.getElementById("explosionSfx");
-		console.log("audio state",explosionAudio.readyState);
 
 		if (!isSent){
-			explosionAudio.currentTime = 0;
+			if (explosionAudio.currentTime != 0){
+				explosionAudio.currentTime = 0;
+			}
 			if (explosionAudio.readyState<4){
 				explosionAudio.load();
 			}
@@ -125,15 +120,20 @@ function App() {
 	}
 	const getNextQuote = () => {
 		let randomNum =  Math.round(Math.random() * (quoteData.length-1 - 0) + 0);
-
+		if (usedQuotes.length >= quoteData.length){
+			usedQuotes = [];
+		}
 		if (previousIndex!=null){
-			while (randomNum == previousIndex){
+			while (randomNum == previousIndex || usedQuotes.includes(randomNum)){
 				randomNum =  Math.round(Math.random() * (quoteData.length-1 - 0) + 0);
 			}
 		}
-		 previousIndex = randomNum;
+		previousIndex = randomNum;
+		usedQuotes.push(randomNum);
 		setQuote(quoteData[randomNum].text);
+
 	}
+
 	const getData=()=>{
 		fetch('data/quotes.json'
 		,{
@@ -144,14 +144,14 @@ function App() {
 		}
 		)
 		  .then(function(response){
-			console.log(response)
 			return response.json();
 		  })
 		  .then(function(json) {
-			console.log(json);
 			setQuoteData(json);
-			let randomNum =  Math.round(Math.random() * (quoteData.length-1 - 0) + 0);
+			let randomNum =  Math.round(Math.random() * (json.length-1 - 0) + 0);
 			setQuote(json[randomNum].text)
+			previousIndex = randomNum;
+			usedQuotes.push(randomNum);
 		  });
 	  };
 	  useEffect(()=>{

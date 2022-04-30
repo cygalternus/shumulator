@@ -8,11 +8,11 @@
         "tskr":"true"
     },
     {
-        "text":"milk before cereal",
+        "text":"milk first before cereal",
         "tskr":"false"
     },
     {
-        "text":"you can sous vide steak in the dishwasher",
+        "text":"dishwasher sous vide steak",
         "tskr":"false"
     },
     {
@@ -22,5 +22,51 @@
     {
         "text":"kid amogus backwards",
         "tskr":"false"
+    },
+    {
+        "text":"gravideez nuts",
+        "tskr":"false"
+    },
+    {
+        "text":"ligma",
+        "tskr":"false"
+    },
+    {
+        "text":"sugoma",
+        "tskr":"false"
+    },
+    {
+        "text":"1kg steel is heavier than 1kg feathers",
+        "tskr":"false"
+    },
+    {
+        "text":"if youre short just become 5head",
+        "tskr":"false"
+    },
+
+    {
+        "text":"is peeing in a diaper public urination",
+        "tskr":"false"  
+    },
+    {
+        "text":"cereal is cold ramen",
+        "tskr":"false"  
+    },
+    {
+        "text":"cdeez nuts",
+        "tskr":"false"  
+    },
+
+    {
+        "text":"water is wet steam is dry",
+        "tskr":"false"  
+    },
+    {
+        "text":"ligma is seiso",
+        "tskr":"false"  
+    },
+    {
+        "text":"pulpless orange juice is orange water",
+        "tskr":"false"  
     }
 ]
