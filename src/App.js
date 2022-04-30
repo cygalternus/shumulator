@@ -158,23 +158,24 @@ function App() {
 		}
 
 		prevShuState =  currentShuState;
-		if (e.key === "Enter"){
+		if (prevShuState === "shu_l"){
 			setShuState(getShuState("shu_r"));
 			currentShuState = "shu_r";
 		}
+		else if (prevShuState === "shu_r"){
+			setShuState(getShuState("shu_l"));
+			currentShuState = "shu_l";
+		}
 		else{
-			if (prevShuState === "shu_l"){
-				setShuState(getShuState("shu_r"));
-				currentShuState = "shu_r";
-			}
-			else if (prevShuState === "shu_r"){
-				setShuState(getShuState("shu_l"));
-				currentShuState = "shu_l";
-			}
-			else{
-				setShuState(getShuState("shu_l"));		
-				currentShuState = "shu_l";
-			}
+			setShuState(getShuState("shu_l"));		
+			currentShuState = "shu_l";
+		}
+		
+	}
+	const onKeyDown = (e)=>{
+		if (e.key === "Enter"){
+			setShuState(getShuState("shu_r"));
+			currentShuState = "shu_r";
 		}
 	}
 	const getNextQuote = () => {
@@ -258,7 +259,7 @@ function App() {
 						<div className='typingContainer'> 
 							<h2 className={isSent?"show":"hide"} id="sentText">{sentText}</h2>
 							{isFinished?
-								<div>
+								<div id="finishedContainer">
 									<h1>Finished!</h1>
 									<h3>
 										Score: {score}
@@ -272,7 +273,7 @@ function App() {
 										<h2 id="textinput">
 											{[...quote.text].map((e,index)=>{return <span key={`letter${index}`} className={isTyped(e,index)?"typed":""}>{e}</span>})}
 										</h2>
-										<input disabled={isFinished} onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState(getShuState("shu_u"))}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
+										<input disabled={isFinished} onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState(getShuState("shu_u"))}  onChange={e => {setEnteredText(e.target.value);keyAnimate(e)}} onKeyDown={(e)=>{onKeyDown(e)}} type="text" value={enteredText}></input>
 										<input style={{display:"none"}} disabled={isSent || enteredText.length == 0 || isFinished} type="submit"/>
 										<span className={`hint ${!seenHint?"show":"hide"}`}>Press enter to submit</span>
 									</form>

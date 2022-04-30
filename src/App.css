@@ -169,6 +169,12 @@ body{
   .startContainer h3{
     font-size: 1rem;
   }
+  #finishedContainer{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -72px;
+  }
 }
 #textinput{
   text-align: center;
