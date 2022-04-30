@@ -242,7 +242,7 @@ function App() {
 					<h1>YaminoTyping</h1>
 					<img src={`/images/shu/${isBday?"bday_shu_d":"shu_d"}.png`}></img>
 					<h3>Type the quote you see as fast as you can! <br></br>See how high you can score in 30 seconds.</h3>
-					<h5 style={{color:'#c9c9c9'}}>*Browser recommended</h5>
+					<h5 style={{color:'#c9c9c9'}}>*Desktop recommended</h5>
 					<button onClick={()=>{setStarted(true)}}>Start</button>
 				</div>:
 				<>
