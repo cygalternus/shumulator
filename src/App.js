@@ -3,20 +3,46 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import {animate,stagger} from 'motion';
-
-let prevShuState =  "shu_d.png";
-let currentShuState = "shu_d.png";
+let bdayShuStates = {
+	"shu_d":"bday_shu_d.png",
+	"shu_u":"bday_shu_u.png",
+	"shu_l":"bday_shu_l.png",
+	"shu_r":"bday_shu_r.png",
+};
+let normalShuStates = {
+	"shu_d":"shu_d.png",
+	"shu_u":"shu_u.png",
+	"shu_l":"shu_l.png",
+	"shu_r":"shu_r.png",
+}
+let prevShuState =  "shu_d";
+let currentShuState = "shu_d";
 let previousIndex;
 let usedQuotes = [];
 let gblScore = 0;
+
+
+
+
 const timelimit = 30;
 let elapsedTime = timelimit;
-function App() {
 
+function App() {
+	let bdayrange1 = new Date('April 30, 2022 00:00:00 GMT-04:00');
+	let bdayrange2 = new Date('May 3, 2022 23:59:59 GMT+04:00');
+	let currentDate = new Date();
+	let isBday = currentDate.getTime() >= bdayrange1.getTime() && currentDate.getTime() <= bdayrange2.getTime();
+	function getShuState(state){
+
+		if (isBday){
+			return bdayShuStates[state];
+		}
+		return normalShuStates[state];
+	}
 	const [sentText,setSentText] = useState("");
 	const [isSent,setIsSent] = useState(false);
 	const [showExplosion,setShowExplosion] = useState(false);
-	const [shuState,setShuState] = useState("shu_d.png");
+	const [shuState,setShuState] = useState(getShuState( "shu_d"));
 	const [enteredText, setEnteredText] = useState(''); 
 	const [quote, setQuote] = useState('ramen is warm cereal'); 
 	const [started, setStarted] = useState(false); 
@@ -135,21 +161,21 @@ function App() {
 
 		prevShuState =  currentShuState;
 		if (e.key === "Enter"){
-			setShuState("shu_r.png");
-			currentShuState = "shu_r.png";
+			setShuState(getShuState("shu_r"));
+			currentShuState = "shu_r";
 		}
 		else{
-			if (prevShuState === "shu_l.png"){
-				setShuState("shu_r.png");
-				currentShuState = "shu_r.png";
+			if (prevShuState === "shu_l"){
+				setShuState(getShuState("shu_r"));
+				currentShuState = "shu_r";
 			}
-			else if (prevShuState === "shu_r.png"){
-				setShuState("shu_l.png");
-				currentShuState = "shu_l.png";
+			else if (prevShuState === "shu_r"){
+				setShuState(getShuState("shu_l"));
+				currentShuState = "shu_l";
 			}
 			else{
-				setShuState("shu_l.png");		
-				currentShuState = "shu_l.png";
+				setShuState(getShuState("shu_l"));		
+				currentShuState = "shu_l";
 			}
 		}
 	}
@@ -215,7 +241,7 @@ function App() {
 				!started?
 				<div className='startContainer'>
 					<h1>YaminoTyping</h1>
-					<img src="/images/shu/shu_d.png"></img>
+					<img src={`/images/shu/${getShuState("shu_d")}`}></img>
 					<h3>Type the quote you see as fast as you can! <br></br>See how high you can score in 30 seconds.</h3>
 					<h5 style={{color:'#c9c9c9'}}>*Browser recommended</h5>
 					<button onClick={()=>{setStarted(true)}}>Start</button>
@@ -248,7 +274,7 @@ function App() {
 										<h2 id="textinput">
 											{[...quote.text].map((e,index)=>{return <span key={`letter${index}`} className={isTyped(e,index)?"typed":""}>{e}</span>})}
 										</h2>
-										<input disabled={isFinished} onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
+										<input disabled={isFinished} onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState(getShuState("shu_u"))}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
 										<input style={{display:"none"}} disabled={isSent || enteredText.length == 0 || isFinished} type="submit"/>
 										<span className={`hint ${!seenHint?"show":"hide"}`}>Press enter to submit</span>
 									</form>
