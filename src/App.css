@@ -168,9 +168,24 @@ body{
 #scoreContainer{
   position: absolute;
   top: 0;
+  left:20px;
+}
+#timerContainer{
+  position: absolute;
+  top: 0;
+  right: 20px;
 }
 .hint{
   color:#c9c9c9;
   position: absolute;
   width: 100%;
+}
+button{
+  background: palevioletred;
+  color: white;
+  border: 0;
+  font-size: 1.25rem;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
 }

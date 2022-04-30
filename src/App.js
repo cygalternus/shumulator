@@ -3,12 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import {animate,stagger} from 'motion';
-import { useTimer } from 'react-timer-hook';
 
 let prevShuState =  "shu_d.png";
 let currentShuState = "shu_d.png";
 let previousIndex;
 let usedQuotes = [];
+let gblScore = 0;
+const timelimit = 30;
+let elapsedTime = timelimit;
 function App() {
 
 	const [sentText,setSentText] = useState("");
@@ -21,7 +23,10 @@ function App() {
 	const [score, setScore] = useState(0); 
 	const [quoteData,setQuoteData] = useState([]);
 	const [seenHint,setSeenHint] = useState(localStorage.getItem("seenHint"));
-
+	const [time, setTime] = useState(elapsedTime); 
+	const [timerStarted, setTimerStarted] = useState(false); 
+	const [isFinished, setIsFinished] = useState(false); 
+	const [personalBest, setPersonalBest] = useState(localStorage.getItem("personalBest"));
 	const [yaminionImg,setYaminionImg] = useState("yaminion.png");
 	const isTyped = (char, index) => {
 		if (enteredText.length-1 >= index){
@@ -49,6 +54,7 @@ function App() {
 		}
 		if (checkInput(e.target[0].value)){
 			setScore(score+1);
+			gblScore++;
 			setEnteredText("");
 			setSentText(e.target[0].value);
 			setIsSent(true);
@@ -88,16 +94,7 @@ function App() {
 		}
 		
 	}
-	const createYaminion = () => {
-		const enemyContainer = document.getElementById("enemyContainer");
-		let yaminion = document.createElement("img");
-		yaminion.classList.add('yaminion');
-		yaminion.src = `/images/yaminion/${yaminionImg}`;
-		enemyContainer.append(yaminion);
 
-
-		enemyContainer.append(yaminion);
-	}
 
 	const keyAnimate = (e) => {
 		var explosionAudio = document.getElementById("explosionSfx");
@@ -109,6 +106,31 @@ function App() {
 			if (explosionAudio.readyState<4){
 				explosionAudio.load();
 			}
+		}
+		if (!timerStarted)
+		{
+			setTimerStarted(true);
+			
+			let interval = setInterval(()=>{
+				elapsedTime = elapsedTime - 1; 
+				setTime(elapsedTime);
+				if (elapsedTime<=0){
+					clearInterval(interval);
+					setIsFinished(true);
+					let pb = localStorage.getItem("personalBest");
+					console.log(pb);
+					if (pb!= null){
+
+						if (pb < gblScore){
+							localStorage.setItem("personalBest",gblScore);
+							setPersonalBest(gblScore);
+						}
+					}
+					else{
+						localStorage.setItem("personalBest",gblScore);
+					}
+				}
+			},1000);
 		}
 
 		prevShuState =  currentShuState;
@@ -170,6 +192,20 @@ function App() {
 	  useEffect(()=>{
 		getData();
 	  },[]);
+	  function reset(){
+		setTimerStarted(false);
+		elapsedTime = timelimit;
+		setTime(elapsedTime);
+		setScore(0);
+		gblScore = 0;
+		usedQuotes = [];
+		let randomNum =  Math.round(Math.random() * (quoteData.length-1 - 0) + 0);
+		setQuote(quoteData[randomNum])
+		previousIndex = randomNum;
+		usedQuotes.push(randomNum);
+		setIsFinished(false);
+		setEnteredText("");
+	  }
   return (
     <div className="App">
 		<div className='boundary'>
@@ -185,8 +221,8 @@ function App() {
 				</div>:
 				<>
 					<audio id="explosionSfx" src="/sfx/explosion.mp3"></audio>
-					<div id="scoreContainer">Score: {score}</div>
-					<div id="timerContainer">Score: {score}</div>
+					<h4 id="scoreContainer">Score: {score}</h4>
+					<h4 id="timerContainer">Time remaining: {time}</h4>
 
 						<div id="enemyContainer">
 								<img className={showExplosion?"show":"hide"} id="explosion" src="/images/explosion.gif"></img>
@@ -195,19 +231,29 @@ function App() {
 						</div>
 			
 						<div className='typingContainer'> 
-								<h2 className={isSent?"show":"hide"} id="sentText">{sentText}</h2>
-			
-							<div className='formContainer'>
-								<form onSubmit={onFormSubmit}>
-									<h2 id="textinput">
-										{[...quote.text].map((e,index)=>{return <span className={isTyped(e,index)?"typed":""}>{e}</span>})}
-									</h2>
-									<input  onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
-									<input style={{display:"none"}} disabled={isSent || enteredText.length == 0} type="submit"/>
-									<span className={`hint ${!seenHint?"show":"hide"}`}>Press enter to submit</span>
-								</form>
-							</div>
-			
+							<h2 className={isSent?"show":"hide"} id="sentText">{sentText}</h2>
+							{isFinished?
+								<div>
+									<h1>Finished!</h1>
+									<h3>
+										Score: {score}
+										<br></br>
+										Personal best: {personalBest!=null?personalBest:0}
+									</h3>
+									<button onClick={reset}>Retry</button>
+								</div>:
+								<div className='formContainer'>
+									<form onSubmit={onFormSubmit}>
+										<h2 id="textinput">
+											{[...quote.text].map((e,index)=>{return <span key={`letter${index}`} className={isTyped(e,index)?"typed":""}>{e}</span>})}
+										</h2>
+										<input disabled={isFinished} onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
+										<input style={{display:"none"}} disabled={isSent || enteredText.length == 0 || isFinished} type="submit"/>
+										<span className={`hint ${!seenHint?"show":"hide"}`}>Press enter to submit</span>
+									</form>
+								</div>
+							}
+
 							<img src={`/images/shu/${shuState}`}></img>
 						</div>
 				</>
