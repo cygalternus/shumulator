@@ -88,12 +88,7 @@ body{
   display: block;
   margin: auto;
 }
-.typingContainer img{
-  position: absolute;
-  right: -160px;
-  bottom: -50px;
-  width: 270px;
-}
+
 .formContainer{
   bottom: 0px;
   position: absolute;
@@ -111,6 +106,13 @@ body{
 }
 #sentText{
   color:palevioletred;
+}
+#shu{
+  position: absolute;
+  right: -160px;
+  bottom: -50px;
+  width: 270px;
+  height: 258px;
 }
 @media only screen and (max-width: 500px) {
   .boundary {
@@ -147,17 +149,17 @@ body{
     top: 10%;
   }
   .typingContainer{
-    bottom: 52%;
+    top: 50%;
+    bottom: auto;
   }
-  .typingContainer img{
+ #shu {
     width: 150px;
+    height: 145px;
     left: 50%;
-    bottom: -150px;
+    top: 30px;
     position: absolute;
     margin-left: -75px;
-
-  
-}
+ }
 
   #sentText{
     max-width: 300px;
@@ -201,4 +203,36 @@ button{
 }
 .startContainer{
   padding: 0px 20px;
+}
+#shu{
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+#shu.shu_d{
+  background-image: url("/public/images/shu/shu_d.png");
+
+}
+#shu.shu_r{
+  background-image: url("/public/images/shu/shu_r.png");
+
+}
+#shu.shu_l{
+  background-image: url("/public/images/shu/shu_l.png");
+}
+#shu.shu_u{
+  background-image: url("/public/images/shu/shu_u.png");
+}
+#shu.bday_shu_d{
+  background-image: url("/public/images/shu/bday_shu_d.png");
+
+}
+#shu.bday_shu_r{
+  background-image: url("/public/images/shu/bday_shu_r.png");
+
+}
+#shu.bday_shu_l{
+  background-image: url("/public/images/shu/bday_shu_l.png");
+}
+#shu.bday_shu_u{
+  background-image: url("/public/images/shu/bday_shu_u.png");
 }

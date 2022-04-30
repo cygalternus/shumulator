@@ -4,16 +4,16 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import {animate,stagger} from 'motion';
 let bdayShuStates = {
-	"shu_d":"bday_shu_d.png",
-	"shu_u":"bday_shu_u.png",
-	"shu_l":"bday_shu_l.png",
-	"shu_r":"bday_shu_r.png",
+	"shu_d":"bday_shu_d",
+	"shu_u":"bday_shu_u",
+	"shu_l":"bday_shu_l",
+	"shu_r":"bday_shu_r",
 };
 let normalShuStates = {
-	"shu_d":"shu_d.png",
-	"shu_u":"shu_u.png",
-	"shu_l":"shu_l.png",
-	"shu_r":"shu_r.png",
+	"shu_d":"shu_d",
+	"shu_u":"shu_u",
+	"shu_l":"shu_l",
+	"shu_r":"shu_r",
 }
 let prevShuState =  "shu_d";
 let currentShuState = "shu_d";
@@ -33,7 +33,6 @@ function App() {
 	let currentDate = new Date();
 	let isBday = currentDate.getTime() >= bdayrange1.getTime() && currentDate.getTime() <= bdayrange2.getTime();
 	function getShuState(state){
-
 		if (isBday){
 			return bdayShuStates[state];
 		}
@@ -242,7 +241,7 @@ function App() {
 				!started?
 				<div className='startContainer'>
 					<h1>YaminoTyping</h1>
-					<img src={`/images/shu/${getShuState("shu_d")}`}></img>
+					<img src={`/images/shu/shu_d.png`}></img>
 					<h3>Type the quote you see as fast as you can! <br></br>See how high you can score in 30 seconds.</h3>
 					<h5 style={{color:'#c9c9c9'}}>*Browser recommended</h5>
 					<button onClick={()=>{setStarted(true)}}>Start</button>
@@ -281,8 +280,9 @@ function App() {
 									</form>
 								</div>
 							}
+					<div id="shu" className={shuState}></div>
 
-							<img src={`/images/shu/${shuState}`}></img>
+							{/* <img src={`/images/shu/${shuState}`}></img> */}
 						</div>
 				</>
 				
