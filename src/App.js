@@ -190,7 +190,7 @@ function App() {
 									</h2>
 									<input  onPaste={(e)=>{e.preventDefault();}} maxLength={50} placeholder={quote.text} autoComplete='off' id="input_phrase" onKeyUp={()=>setShuState("shu_u.png")}  onChange={e => setEnteredText(e.target.value)} onKeyDown={(e)=>keyAnimate(e)} type="text" value={enteredText}></input>
 									<input style={{display:"none"}} disabled={isSent || enteredText.length == 0} type="submit"/>
-			
+									<span className='hint'>Press enter to submit</span>
 								</form>
 							</div>
 			
