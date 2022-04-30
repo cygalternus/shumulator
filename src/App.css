@@ -165,3 +165,7 @@ body{
 .typed{
   color:palevioletred;
 }
+#scoreContainer{
+  position: absolute;
+  top: 0;
+}
