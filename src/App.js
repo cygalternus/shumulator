@@ -95,7 +95,6 @@ function App() {
 				setShowExplosion(true);
 				document.getElementById("explosion").src="/images/explosion.gif"
 				document.getElementById("explosionSfx").play();
-				console.log(quote)
 				if (quote.tskr){
 					setYaminionImg("yaminion_tskr.png");
 
@@ -122,16 +121,16 @@ function App() {
 
 
 	const keyAnimate = (e) => {
-		var explosionAudio = document.getElementById("explosionSfx");
+		// var explosionAudio = document.getElementById("explosionSfx");
 
-		if (!isSent){
-			if (explosionAudio.currentTime != 0){
-				explosionAudio.currentTime = 0;
-			}
-			if (explosionAudio.readyState<4){
-				explosionAudio.load();
-			}
-		}
+		// if (!isSent){
+		// 	if (explosionAudio.currentTime != 0){
+		// 		explosionAudio.currentTime = 0;
+		// 	}
+		// 	if (explosionAudio.readyState<4){
+		// 		explosionAudio.load();
+		// 	}
+		// }
 		if (!timerStarted)
 		{
 			setTimerStarted(true);
@@ -143,7 +142,6 @@ function App() {
 					clearInterval(interval);
 					setIsFinished(true);
 					let pb = localStorage.getItem("personalBest");
-					console.log(pb);
 					if (pb!= null){
 
 						if (pb < gblScore){
@@ -241,7 +239,7 @@ function App() {
 				!started?
 				<div className='startContainer'>
 					<h1>YaminoTyping</h1>
-					<img src={`/images/shu/shu_d.png`}></img>
+					<img src={`/images/shu/${isBday?"bday_shu_d":"shu_d"}.png`}></img>
 					<h3>Type the quote you see as fast as you can! <br></br>See how high you can score in 30 seconds.</h3>
 					<h5 style={{color:'#c9c9c9'}}>*Browser recommended</h5>
 					<button onClick={()=>{setStarted(true)}}>Start</button>
